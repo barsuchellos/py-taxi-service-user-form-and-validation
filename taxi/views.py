@@ -1,3 +1,4 @@
+from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import render, get_object_or_404, redirect
@@ -122,14 +123,14 @@ class DriverCreateView(LoginRequiredMixin, CreateView):
 
 
 class DriverDeleteView(LoginRequiredMixin, DeleteView):
-    model = Driver
+    model = get_user_model()
     success_url = reverse_lazy("taxi:driver-list")
 
 
 class DriverUpdateLicenseView(LoginRequiredMixin, UpdateView):
     template_name = "taxi/driver_license_update.html"
     form_class = DriverLicenseUpdateForm
-    model = Driver
+    model = get_user_model()
 
     def get_success_url(self):
         return reverse_lazy("taxi:driver-detail", kwargs={"pk": self.object.pk})

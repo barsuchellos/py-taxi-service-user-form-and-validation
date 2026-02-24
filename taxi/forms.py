@@ -1,9 +1,10 @@
 from django import forms
+from django.contrib.auth import get_user_model
 from django.contrib.auth.forms import UserCreationForm
 from django.core.validators import RegexValidator
 from django.forms import ModelForm
 
-from taxi.models import Driver, Car
+from taxi.models import  Car
 
 
 class DriverCreationForm(UserCreationForm):
@@ -12,7 +13,7 @@ class DriverCreationForm(UserCreationForm):
     )
 
     class Meta(UserCreationForm.Meta):
-        model = Driver
+        model = get_user_model()
         fields = UserCreationForm.Meta.fields + ("first_name", "last_name", "email", "license_number",)
 
 
@@ -23,7 +24,7 @@ class DriverLicenseUpdateForm(ModelForm):
 
     def clean_license_number(self):
         license_number = self.cleaned_data["license_number"]
-        if (Driver.objects
+        if (get_user_model().objects
                 .filter(license_number=license_number)
                 .exclude(pk=self.instance.pk)
                 .exists()):
@@ -31,7 +32,7 @@ class DriverLicenseUpdateForm(ModelForm):
         return license_number
 
     class Meta:
-        model = Driver
+        model = get_user_model()
         fields = ("license_number",)
 
 
